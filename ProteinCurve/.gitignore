@@ -1,2 +1,3 @@
-/bin/
-/JarFiles/
+/*
+!/src
+/src/*
