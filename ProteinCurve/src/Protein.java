@@ -244,7 +244,7 @@ public class Protein {
 				for (int k = j + 1; k < atms.size(); k++) {
 					a3 = atms.get(k);
 
-					if (a2.dis3D(a1) > 20 || a1.dis3D(a3) > 20)
+					if (a2.dis3D(a3) > 20 || a1.dis3D(a3) > 20)
 						continue;
 
 					spheres = Curvature3D.intersectingSphere(a1, a2, a3, a4);
