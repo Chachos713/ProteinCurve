@@ -293,6 +293,9 @@ public class Protein {
 				if (sph == null)
 					continue;
 
+				if (sph.getDis3D(x, y, z) > sph.r)
+					continue;
+
 				if (sph.r > max) {
 					if (isGood(sph, atms)) {
 						max = sph.r;
