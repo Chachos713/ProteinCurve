@@ -4,15 +4,39 @@ import java.util.Scanner;
 
 import javax.vecmath.Vector3d;
 
+/**
+ * A storage class to read, store, and compute the curvature of the protein.
+ * 
+ * @author Kyle Diller
+ *
+ */
 public class Protein {
+	/**
+	 * The list of atoms within the protein.
+	 */
 	private ArrayList<Atom3D> atoms;
+
+	/**
+	 * The list of planes that make up the convex hull.
+	 */
 	private ArrayList<Plane> hull;
 
+	/**
+	 * Creates an empty protein with no atoms or a convex hull.
+	 */
 	private Protein() {
 		atoms = new ArrayList<Atom3D>();
 		hull = new ArrayList<Plane>();
 	}
 
+	/**
+	 * Creates a protein from a file (protein) that is read.
+	 * 
+	 * @param protein
+	 *            the file to read the protein from.
+	 * @throws Exception
+	 *             if there is a problem with the file.
+	 */
 	public Protein(String protein) throws Exception {
 		this();
 		try {
@@ -26,6 +50,13 @@ public class Protein {
 		}
 	}
 
+	/**
+	 * Creates the convex hull by using a semi-brute force method.
+	 * 
+	 * @throws Exception
+	 *             if there is a problem calculating a plane based on a singular
+	 *             matrix.
+	 */
 	private void makeConvexHull() throws Exception {
 		int a;
 		Plane[] planes;
@@ -75,9 +106,6 @@ public class Protein {
 
 							if (d <= temp.r - Util.ERROR * 1000) {
 								if (d > 0) {
-									// System.out.println("Bad Mojo  " + d + " "
-									// + temp + " >< "
-									// + (Math.abs(temp.r - d)));
 								}
 								planes[p] = null;
 								m++;
@@ -90,8 +118,6 @@ public class Protein {
 					for (Plane p : planes) {
 						if (p != null) {
 							hull.add(p);
-							// p.createPlane(Color.blue);
-							// this.addChild(p);
 						}
 					}
 				}
@@ -101,6 +127,10 @@ public class Protein {
 		System.out.println(n + " <> " + m);
 	}
 
+	/**
+	 * Cleans the atoms that are buried within the protein and have little to no
+	 * chance of being part of the curvature of the protein.
+	 */
 	private void cleanburied() {
 		Atom3D query, temp;
 		final double extraRadius = 1.5;
@@ -183,6 +213,14 @@ public class Protein {
 		}
 	}
 
+	/**
+	 * Reads the file (protein) and stores the atoms that are read.
+	 * 
+	 * @param protein
+	 *            the file to read.
+	 * @throws Exception
+	 *             if there are problems with reading the file.
+	 */
 	private void readProtein(String protein) throws Exception {
 		Scanner sc = new Scanner(new File(protein));
 		sc.nextLine();
@@ -197,6 +235,19 @@ public class Protein {
 		sc.close();
 	}
 
+	/**
+	 * Computes the curvature of the protein at a given point. <br>
+	 * Uses a semi-bruteforce algorithm to compute the curvature.
+	 * 
+	 * @param x
+	 *            the x component of the point.
+	 * @param y
+	 *            the y component of the point.
+	 * @param z
+	 *            the z component of the point.
+	 * @return the sphere (as an atom) that has the largest radius and contains
+	 *         the point.
+	 */
 	public Atom3D curvature(double x, double y, double z) {
 		Atom3D query = new Atom3D(x, y, z, 0);
 
@@ -308,6 +359,18 @@ public class Protein {
 		return maxSph;
 	}
 
+	/**
+	 * Finds the closest atom to a given point. <br>
+	 * Used if there is a problem computing the curvature of the atom.
+	 * 
+	 * @param x
+	 *            the x component of the point.
+	 * @param y
+	 *            the y component of the point.
+	 * @param z
+	 *            the z component of the point.
+	 * @return the distance between the nearest atom and the point.
+	 */
 	private double findClosest(double x, double y, double z) {
 		double dist = Double.POSITIVE_INFINITY;
 		double distTemp;
@@ -321,6 +384,19 @@ public class Protein {
 		return dist;
 	}
 
+	/**
+	 * Counts how many atoms lie between two atoms.
+	 * 
+	 * @param atms
+	 *            the list of atoms to check against.
+	 * @param a1
+	 *            the first atom.
+	 * @param a2
+	 *            the second atom.
+	 * @param n
+	 *            the threshold of how many atoms make it invisible.
+	 * @return true if the number of atoms < n.
+	 */
 	public boolean canSee(ArrayList<Atom3D> atms, Atom3D a1, Atom3D a2, int n) {
 		Vector3d quest = a1.getVector();
 		Vector3d pQuery = a2.getVector();
@@ -364,11 +440,18 @@ public class Protein {
 		return true;
 	}
 
+	/**
+	 * Checks if a sphere does not enter the protein.
+	 * 
+	 * @param sph
+	 *            the sphere to check.
+	 * @param atms
+	 *            the list of atoms to check against.
+	 * @return true if the sphere does not enter the protein.
+	 */
 	private boolean isGood(Atom3D sph, ArrayList<Atom3D> atms) {
 		for (Atom3D a : atms) {
 			if (a.dis3D(sph) - (a.r + sph.r) < -Util.ERROR) {
-				// System.out.println(a + "\n" + sph);
-				// System.out.println((a.dis3D(sph) - (a.r + sph.r)) + "\n");
 				return false;
 			}
 		}

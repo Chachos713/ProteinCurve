@@ -1,7 +1,25 @@
 import javax.vecmath.Vector3d;
 
+/**
+ * A utility class used to calculate the planes defined by 3 atoms. Mainly used
+ * to calculate the convex hull of the protein.
+ * 
+ * @author Kyle Diller
+ *
+ */
 public class PlaneMath {
 
+	/**
+	 * Calculates the 2 planes that are defined by 3 atoms.
+	 * 
+	 * @param a1
+	 *            The first atom.
+	 * @param a2
+	 *            The second atom.
+	 * @param a3
+	 *            The third atom.
+	 * @return the planes that are defined by the 3 atoms.
+	 */
 	public static Plane[] getPlanes(Atom3D a1, Atom3D a2, Atom3D a3) {
 		Vector3d p1, p2, p3;
 		p1 = a1.getVector();
@@ -18,7 +36,7 @@ public class PlaneMath {
 		double check2 = Math.abs(v1.length() * temp.length());
 
 		if (Math.abs(check1 - check2) < Util.ERROR) {
-			//System.err.println("ERROR: Singular");
+			// System.err.println("ERROR: Singular");
 			return null;
 		}
 
@@ -28,7 +46,7 @@ public class PlaneMath {
 		v1.z /= dis21;
 
 		if (Math.abs(1 - v1.length()) > Util.ERROR) {
-			//System.err.println("ERROR: v1 Not Normalized");
+			// System.err.println("ERROR: v1 Not Normalized");
 			return null;
 		}
 
@@ -46,21 +64,21 @@ public class PlaneMath {
 		v2.z /= dis31;
 
 		if (Math.abs(1 - v2.length()) > Util.ERROR) {
-			//System.err.println("ERROR: v2 Not Normalized");
+			// System.err.println("ERROR: v2 Not Normalized");
 			return null;
 		}
 
 		v3.cross(v1, v2);
 
 		if (Math.abs(1 - v3.length()) > Util.ERROR) {
-			//System.err.println("ERROR: v3 Not Normalized");
+			// System.err.println("ERROR: v3 Not Normalized");
 			return null;
 		}
 
 		if (Math.abs(v1.dot(v2)) > Util.ERROR
 				|| Math.abs(v1.dot(v3)) > Util.ERROR
 				|| Math.abs(v2.dot(v3)) > Util.ERROR) {
-			//System.err.println("ERROR: v1, v2, or v3 is not orthoganol");
+			// System.err.println("ERROR: v1, v2, or v3 is not orthoganol");
 			return null;
 		}
 
@@ -125,26 +143,41 @@ public class PlaneMath {
 		return planes;
 	}
 
+	/**
+	 * Checks that a plane is touching all 3 spheres.
+	 * 
+	 * @param plane
+	 *            the plane to check.
+	 * @param a1
+	 *            the first atom.
+	 * @param a2
+	 *            the second atom.
+	 * @param a3
+	 *            the third atom.
+	 * @return true if all 3 atoms are touching the plane.
+	 */
 	private static Plane checkPlane(Plane plane, Atom3D a1, Atom3D a2, Atom3D a3) {
 		double disTemp = plane.dis(a1.x, a1.y, a1.z);
 
 		if (disTemp < 0 || Math.abs(disTemp - a1.r) > Util.ERROR) {
-//			System.err.println("ERROR: plane no good1:  " + disTemp + "  "
-//					+ a1.r);
+			// System.err.println("ERROR: plane no good1:  " + disTemp + "  "
+			// + a1.r);
 			return null;
 		}
 
 		disTemp = plane.dis(a2.x, a2.y, a2.z);
 
 		if (disTemp < 0 || Math.abs(disTemp - a2.r) > Util.ERROR) {
-//			System.err.println("ERROR: plane no good2" + disTemp + "  " + a2.r);
+			// System.err.println("ERROR: plane no good2" + disTemp + "  " +
+			// a2.r);
 			return null;
 		}
 
 		disTemp = plane.dis(a3.x, a3.y, a3.z);
 
 		if (disTemp < 0 || Math.abs(disTemp - a3.r) > Util.ERROR) {
-//			System.err.println("ERROR: plane no good3" + disTemp + "  " + a3.r);
+			// System.err.println("ERROR: plane no good3" + disTemp + "  " +
+			// a3.r);
 			return null;
 		}
 

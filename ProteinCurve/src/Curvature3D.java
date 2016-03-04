@@ -1,6 +1,25 @@
 import Jama.Matrix;
 
+/**
+ * A utility class used to compute the spheres that just touch 4 atoms.
+ * 
+ * @author Kyle Diller
+ *
+ */
 public class Curvature3D {
+	/**
+	 * Calculates the spheres that are touching the edges of the 4 atoms.
+	 * 
+	 * @param a1
+	 *            the first atom.
+	 * @param a2
+	 *            the second atom.
+	 * @param a3
+	 *            the third atom.
+	 * @param a4
+	 *            the fourth atom.
+	 * @return the list of spheres that are touching the four atoms.
+	 */
 	public static Atom3D[] intersectingSphere(Atom3D a1, Atom3D a2, Atom3D a3,
 			Atom3D a4) {
 		try {
@@ -85,6 +104,21 @@ public class Curvature3D {
 		return null;
 	}
 
+	/**
+	 * Solves for the spheres based on finding what the values of z are.
+	 * 
+	 * @param A
+	 *            the matrix A in the equation Ax = b, where b = z values;
+	 * @param a1
+	 *            the first atom.
+	 * @param a2
+	 *            the second atom.
+	 * @param a3
+	 *            the third atom.
+	 * @param a4
+	 *            the fourth atom.
+	 * @return the spheres found by solving for the z values.
+	 */
 	private static Atom3D[] solve4Z(Matrix A, Atom3D a1, Atom3D a2, Atom3D a3,
 			Atom3D a4) {
 		Matrix B = A.transpose().times(A);
@@ -141,6 +175,21 @@ public class Curvature3D {
 		return a3D;
 	}
 
+	/**
+	 * Solves for the spheres based on finding what the values of y are.
+	 * 
+	 * @param A
+	 *            the matrix A in the equation Ax = b, where b = y values;
+	 * @param a1
+	 *            the first atom.
+	 * @param a2
+	 *            the second atom.
+	 * @param a3
+	 *            the third atom.
+	 * @param a4
+	 *            the fourth atom.
+	 * @return the spheres found by solving for the y values.
+	 */
 	private static Atom3D[] solve4Y(Matrix A, Atom3D a1, Atom3D a2, Atom3D a3,
 			Atom3D a4) {
 
@@ -198,6 +247,21 @@ public class Curvature3D {
 		return a3D;
 	}
 
+	/**
+	 * Solves for the spheres based on finding what the values of x are.
+	 * 
+	 * @param A
+	 *            the matrix A in the equation Ax = b, where b = x values;
+	 * @param a1
+	 *            the first atom.
+	 * @param a2
+	 *            the second atom.
+	 * @param a3
+	 *            the third atom.
+	 * @param a4
+	 *            the fourth atom.
+	 * @return the spheres found by solving for the x values.
+	 */
 	private static Atom3D[] solve4X(Matrix A, Atom3D a1, Atom3D a2, Atom3D a3,
 			Atom3D a4) {
 
@@ -255,6 +319,21 @@ public class Curvature3D {
 		return a3D;
 	}
 
+	/**
+	 * Solves for the spheres based on finding what the values of r are.
+	 * 
+	 * @param A
+	 *            the matrix A in the equation Ax = b, where b = r values;
+	 * @param a1
+	 *            the first atom.
+	 * @param a2
+	 *            the second atom.
+	 * @param a3
+	 *            the third atom.
+	 * @param a4
+	 *            the fourth atom.
+	 * @return the spheres found by solving for the r values.
+	 */
 	private static Atom3D[] solve4R(Matrix A, Atom3D a1, Atom3D a2, Atom3D a3,
 			Atom3D a4) {
 
@@ -311,6 +390,21 @@ public class Curvature3D {
 		return a3D;
 	}
 
+	/**
+	 * Checks if the spheres are just touching the surface of all 4 atoms.
+	 * 
+	 * @param a1
+	 *            the first atom.
+	 * @param a2
+	 *            the second atom.
+	 * @param a3
+	 *            the third atom.
+	 * @param a4
+	 *            the fourth atom.
+	 * @param a3d
+	 *            the list of spheres that were found.
+	 * @return true regardless of what happens.
+	 */
 	private static boolean check(Atom3D a1, Atom3D a2, Atom3D a3, Atom3D a4,
 			Atom3D[] a3d) {
 
