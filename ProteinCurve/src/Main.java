@@ -2,8 +2,24 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.Scanner;
 
+/**
+ * The main entry point into the program. Can change according to what it is
+ * needed to do.
+ * 
+ * @author Kyle Diller
+ *
+ */
 public class Main {
 
+	/**
+	 * This version of the program reads in a protein and a molecule, then
+	 * computes the curvature of the protein at each of the molecules atoms.
+	 * 
+	 * @param args
+	 *            the list of files to read and write to.
+	 * @throws Exception
+	 *             thrown if there is some problem reading a file.
+	 */
 	public static void main(String[] args) throws Exception {
 		if (args.length != 3) {
 			usage();
@@ -40,6 +56,9 @@ public class Main {
 		os.close();
 	}
 
+	/**
+	 * A standard error usage message telling the user how to run this program.
+	 */
 	private static void usage() {
 		System.err
 				.println("java -jar ProteinCurve.jar <protein file> <mol file> <output file>");
