@@ -458,4 +458,24 @@ public class Protein {
 
 		return true;
 	}
+
+	/**
+	 * Checks if a point is inside the protein or not
+	 * 
+	 * @param x
+	 *            the x coordinate of the point to check
+	 * @param y
+	 *            the y coordinate of the point to check
+	 * @param z
+	 *            the z coordinate of the point to check
+	 * @return true if the point is within the protein
+	 */
+	public boolean isInside(double x, double y, double z) {
+		for (Atom3D a : atoms) {
+			if (a.getDis3D(x, y, z) <= a.r)
+				return true;
+		}
+
+		return false;
+	}
 }
