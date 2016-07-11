@@ -49,7 +49,7 @@ public class Main {
 			temp = p.curvature(x, y, z);
 
 			os.write("\n" + split[0] + "," + temp.x + "," + temp.y + ","
-					+ temp.z + "," + temp.z);
+					+ temp.z + "," + temp.r);
 		}
 
 		sc.close();
