@@ -356,7 +356,7 @@ public class Protein {
 			}
 		}
 
-		return maxSph;
+		return new Atom3D(x, y, z, maxSph.r);
 	}
 
 	/**
