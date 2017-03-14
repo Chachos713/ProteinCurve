@@ -89,7 +89,6 @@ public class Plane {
 	}
 
 	public String toString() {
-		return p0.x + "," + p0.y + "," + p0.z + "," + norm.x + "," + norm.y
-				+ "," + norm.z;
+		return p0 + " <> " + norm;
 	}
 }

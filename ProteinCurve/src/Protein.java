@@ -45,6 +45,7 @@ public class Protein {
             cleanburied();
             makeConvexHull();
             System.out.println(hull.size() + " <> " + atoms.size());
+            System.out.println(hull.get(0));
         } catch (Exception e) {
             throw new Exception(e);
         }
@@ -266,7 +267,7 @@ public class Protein {
             if (d < a.r)
                 return null;
 
-                pq.add(a, d);
+            pq.add(a, d);
         }
 
         ArrayList<Atom3D> atms = new ArrayList<Atom3D>();
