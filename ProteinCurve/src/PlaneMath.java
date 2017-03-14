@@ -25,9 +25,9 @@ public class PlaneMath {
         p1 = a1.getVector();
         p2 = a2.getVector();
         p3 = a3.getVector();
-        Vector3d v1 = new Vector3d();
-        Vector3d v2 = new Vector3d();
-        Vector3d v3 = new Vector3d();
+        Vector3d v1 = new Vector3d(); // First Axis
+        Vector3d v2 = new Vector3d(); // Axis within the plane
+        Vector3d v3 = new Vector3d(); // Normal Axis to the plane
         Vector3d temp = new Vector3d();
 
         v1.sub(p2, p1);

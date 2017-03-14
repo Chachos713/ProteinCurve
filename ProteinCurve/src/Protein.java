@@ -45,7 +45,6 @@ public class Protein {
             cleanburied();
             makeConvexHull();
             System.out.println(hull.size() + " <> " + atoms.size());
-            System.out.println(hull.get(0));
         } catch (Exception e) {
             throw new Exception(e);
         }
