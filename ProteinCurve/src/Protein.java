@@ -152,7 +152,6 @@ public class Protein {
         final double DX = 0.25;
         double myDphi, nPhi, phi, r, myDtheta, nTheta, theta, dSQ;
         double x, y, z;
-        boolean buried;
 
         for (int a = 0; a < atoms.size(); a++) {
             query = atoms.get(a);
@@ -170,7 +169,7 @@ public class Protein {
                 nTheta = (int) (2 * Math.PI / myDtheta) + 1;
                 myDtheta = 2.0 * Math.PI / (double) (nTheta);
 
-                for (int j = 0; j < nTheta; j++) {
+                theta: for (int j = 0; j < nTheta; j++) {
                     theta = myDtheta * j;
                     x = query.x + (query.r + extraRadius) * Math.sin(phi)
                             * Math.cos(theta);
@@ -178,7 +177,6 @@ public class Protein {
                             * Math.sin(theta);
                     z = query.z + (query.r + extraRadius) * Math.cos(phi);
 
-                    buried = false;
                     for (int b = 0; b < query.neigh.size(); b++) {
                         temp = query.neigh.get(b);
 
@@ -189,15 +187,12 @@ public class Protein {
 
                         if (dSQ < (temp.r + extraRadius)
                                 * (temp.r + extraRadius)) {
-                            buried = true;
-                            break;
+                            continue theta;
                         }
                     }
 
-                    if (!buried) {
-                        query.buried = false;
-                        break start;
-                    }
+                    query.buried = false;
+                    break start;
                 }
             }
         }
