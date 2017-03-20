@@ -105,8 +105,6 @@ public class Protein {
                             d = planes[p].dis(temp.x, temp.y, temp.z);
 
                             if (d <= temp.r - Util.ERROR * 1000) {
-                                if (d > 0) {
-                                }
                                 planes[p] = null;
                                 m++;
 
