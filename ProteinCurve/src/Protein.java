@@ -284,14 +284,8 @@ public class Protein {
             for (int j = i + 1; j < atms.size(); j++) {
                 a2 = atms.get(j);
 
-                if (a2.dis3D(a1) > 20)
-                    continue;
-
                 for (int k = j + 1; k < atms.size(); k++) {
                     a3 = atms.get(k);
-
-                    if (a2.dis3D(a3) > 20 || a1.dis3D(a3) > 20)
-                        continue;
 
                     spheres = Curvature3D.intersectingSphere(a1, a2, a3, a4);
 
@@ -308,8 +302,6 @@ public class Protein {
 
                                 maxTrip = new Triple(a1, a2, a3);
                                 maxSph = sph;
-                            } else {
-
                             }
                         }
                     }
@@ -320,6 +312,7 @@ public class Protein {
         if (maxTrip == null) {
             System.err.println("ERROR:\n" + x + " <> " + y + " <> " + z);
 
+            // atms.get(0) should be the closest atom
             return new Atom3D(x, y, z, findClosest(x, y, z));
         }
 
