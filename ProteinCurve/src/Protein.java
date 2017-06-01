@@ -71,17 +71,8 @@ public class Protein {
             for (int j = i + 1; j < atoms.size(); j++) {
                 a2 = atoms.get(j);
 
-                if (!canSee(atoms, a1, a2, 3)) {
-                    continue;
-                }
-
                 for (int k = j + 1; k < atoms.size(); k++) {
                     a3 = atoms.get(k);
-
-                    if (!canSee(atoms, a1, a3, 3))
-                        continue;
-                    if (!canSee(atoms, a2, a3, 3))
-                        continue;
 
                     planes = PlaneMath.getPlanes(a1, a2, a3);
 
