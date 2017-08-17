@@ -30,6 +30,20 @@ public class Protein {
     }
 
     /**
+     * Copy constructor
+     */
+    public Protein(Protein o) {
+        this();
+        for (int i = 0; i < o.atoms.size(); i++) {
+            atoms.add(new Atom3D(o.atoms.get(i)));
+        }
+
+        for (int i = 0; i < o.hull.size(); i++) {
+            hull.add(new Plane(o.hull.get(i)));
+        }
+    }
+
+    /**
      * Creates a protein from a file (protein) that is read.
      * 
      * @param protein
@@ -41,13 +55,17 @@ public class Protein {
         this();
         try {
             readProtein(protein);
-
-            cleanburied();
-            makeConvexHull();
-            System.out.println(hull.size() + " <> " + atoms.size());
         } catch (Exception e) {
             throw new Exception(e);
         }
+    }
+
+    // Clean the protein to speed up curvature
+    public void clean() {
+        cleanburied();
+        makeConvexHull();
+        System.out.println("Hull: " + hull.size() + " <> Atoms: "
+                + atoms.size());
     }
 
     /**
@@ -57,13 +75,11 @@ public class Protein {
      *             if there is a problem calculating a plane based on a singular
      *             matrix.
      */
-    private void makeConvexHull() throws Exception {
+    private void makeConvexHull() {
         int a;
         Plane[] planes;
         Atom3D a1, a2, a3, temp;
         double d;
-
-        int n = 0, m = 0;
 
         for (int i = 0; i < atoms.size(); i++) {
             a1 = atoms.get(i);
@@ -80,8 +96,6 @@ public class Protein {
                         continue;
                     }
 
-                    n += 2;
-
                     for (int p = 0; p < planes.length; p++) {
                         if (planes[p] == null)
                             continue;
@@ -97,7 +111,6 @@ public class Protein {
 
                             if (d <= temp.r - Util.ERROR * 1000) {
                                 planes[p] = null;
-                                m++;
 
                                 break;
                             }
@@ -112,8 +125,6 @@ public class Protein {
                 }
             }
         }
-
-        System.out.println(n + " <> " + m);
     }
 
     /**
@@ -270,7 +281,7 @@ public class Protein {
         a4 = new Atom3D(x, y, z, 0);
         Triple maxTrip = null;
 
-        for (int i = 0; i < atms.size(); i++) {
+       for (int i = 0; i < atms.size(); i++) {
             a1 = atms.get(i);
             for (int j = i + 1; j < atms.size(); j++) {
                 a2 = atms.get(j);
@@ -480,8 +491,13 @@ public class Protein {
                 // Are the atoms in a singular line
                 if (isSingular(atms.get(i), atms.get(j), q)) {
                     // Solve for the singular
+                    
+                    System.err.println("Expected a linear set for the atoms");
+                    
+                    //TODO Check to see if there is a valid sphere
                 } else {
-                    Atom3D[] spheres = Curvature2D.nonSingular(atms.get(i), atms.get(j), q);
+                    Atom3D[] spheres = Curvature2D.nonSingular(atms.get(i),
+                            atms.get(j), q);
 
                     check: for (Atom3D a : spheres) {
                         // Check if the sphere is valid
@@ -495,7 +511,7 @@ public class Protein {
                             if (a.dis3D(atms.get(k)) < a.r + atms.get(k).r)
                                 continue check;
                         }
-                        
+
                         best = a;
                     }
                 }

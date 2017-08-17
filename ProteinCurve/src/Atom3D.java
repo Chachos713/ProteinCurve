@@ -61,6 +61,13 @@ public class Atom3D {
         neigh = new ArrayList<Atom3D>();
     }
 
+    /**
+     * Copy Constructor
+     */
+    public Atom3D(Atom3D atom3d) {
+        this(atom3d.x, atom3d.y,atom3d.z, atom3d.r);
+    }
+
     public String toString() {
         return x + "," + y + "," + z + "," + r;
     }

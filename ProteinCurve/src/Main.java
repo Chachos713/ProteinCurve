@@ -25,11 +25,14 @@ public class Main {
             usage();
             return;
         }
-        
+
         System.out.println("Starting Program");
 
-        long start = System.currentTimeMillis();
         Protein p = new Protein(args[0]);
+
+        System.out.println("Cleaning");
+        long start = System.currentTimeMillis();
+        p.clean();
         System.out
                 .println("Make Time: " + (System.currentTimeMillis() - start));
 
@@ -37,7 +40,7 @@ public class Main {
         FileWriter os = new FileWriter(new File(args[2]));
 
         sc.nextLine();
-        os.write("Point,X,Y,Z,R");
+        os.write("Point,X,Y,Z,R Approx,R Num,Time");
 
         String line;
         Atom3D temp;
@@ -46,6 +49,8 @@ public class Main {
 
         long tot = 0;
         int i = 0;
+        
+        System.out.println("Calculating Curvature");
 
         while (sc.hasNextLine()) {
             line = sc.nextLine();
@@ -56,11 +61,17 @@ public class Main {
 
             start = System.currentTimeMillis();
             temp = p.curvature(x, y, z);
-            tot += System.currentTimeMillis() - start;
+            long time = System.currentTimeMillis() - start;
+            tot += time;
             i++;
 
+            if (i % 100 == 0) {
+                System.out.println(i + " <> " + (tot / i));
+            }
+
             os.write("\n" + split[0] + "," + temp.x + "," + temp.y + ","
-                    + temp.z + "," + temp.r);
+                    + temp.z + "," + temp.r + "," + split[4] + "," + time);
+            os.flush();
         }
 
         System.out.println("Avg Time: " + (tot / i));
