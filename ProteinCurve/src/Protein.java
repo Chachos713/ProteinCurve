@@ -304,7 +304,10 @@ public class Protein {
             System.err.println("ERROR:\n" + x + " <> " + y + " <> " + z);
 
             // atms.get(0) should be the closest atom
-            return new Atom3D(x, y, z, findClosest(x, y, z));
+            // return new Atom3D(x, y, z, findClosest(x, y, z));
+
+            Atom3D a = findPair(x, y, z, atms);
+            return new Atom3D(x, y, z, a.r);
         }
 
         for (int i = 0; i < atms.size(); i++) {
@@ -456,5 +459,87 @@ public class Protein {
         }
 
         return false;
+    }
+
+    // Finds the largest sphere when the point is between two atoms
+    // Has 3 Tests
+    // 1. Point is within convex hull
+    // 2. Is the point linear with the two atoms
+    // 3. When it is not
+    public Atom3D findPair(double x, double y, double z, ArrayList<Atom3D> atms) {
+        Atom3D best = new Atom3D(x, y, z, 0);
+        Atom3D q = new Atom3D(x, y, z, 0);
+
+        for (int i = 0; i < atms.size(); i++) {
+            for (int j = i + 1; j < atms.size(); j++) {
+                // Check if the point is not in the convex hull of the two atoms
+                if (!inAtoms(atms.get(i), atms.get(j), q)) {
+                    continue;
+                }
+
+                // Are the atoms in a singular line
+                if (isSingular(atms.get(i), atms.get(j), q)) {
+                    // Solve for the singular
+                } else {
+                    Atom3D[] spheres = Curvature2D.nonSingular(atms.get(i), atms.get(j), q);
+
+                    check: for (Atom3D a : spheres) {
+                        // Check if the sphere is valid
+                        // Check if the radius is larger
+
+                        if (a.r <= best.r) {
+                            continue;
+                        }
+
+                        for (int k = 0; k < atms.size(); k++) {
+                            if (a.dis3D(atms.get(k)) < a.r + atms.get(k).r)
+                                continue check;
+                        }
+                        
+                        best = a;
+                    }
+                }
+            }
+        }
+
+        return best;
+    }
+
+    // Checks if the atom is in the convex hull of the other two atoms
+    private boolean inAtoms(Atom3D a1, Atom3D a2, Atom3D q) {
+        Vector3d v1 = a1.getVector();
+        Vector3d v2 = a2.getVector();
+        Vector3d vq = q.getVector();
+
+        Vector3d line = new Vector3d();
+        line.sub(v2, v1);
+
+        Vector3d qline = new Vector3d();
+        qline.sub(vq, v1);
+
+        double dist = line.dot(qline);
+
+        if (dist < 0 || dist > 1)
+            return false;
+
+        double rq = Math.sqrt(qline.dot(qline) - dist * dist);
+
+        double rp = (a2.r - a1.r) * dist + a1.r;
+
+        return rq <= rp;
+    }
+
+    // Check if the two atoms and point is in a straight line
+    private boolean isSingular(Atom3D a1, Atom3D a2, Atom3D q) {
+        Vector3d v1 = new Vector3d();
+        Vector3d v2 = new Vector3d();
+
+        v1.sub(a1.getVector(), q.getVector());
+        v2.sub(a2.getVector(), q.getVector());
+
+        double d1 = Math.abs(v1.dot(v2));
+        double d2 = Math.abs(v2.length() * v1.length());
+
+        return d1 == d2;
     }
 }

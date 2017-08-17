@@ -25,6 +25,8 @@ public class Main {
             usage();
             return;
         }
+        
+        System.out.println("Starting Program");
 
         long start = System.currentTimeMillis();
         Protein p = new Protein(args[0]);
