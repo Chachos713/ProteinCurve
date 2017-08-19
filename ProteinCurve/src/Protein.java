@@ -53,11 +53,9 @@ public class Protein {
      */
     public Protein(String protein) throws Exception {
         this();
-        try {
-            readProtein(protein);
-        } catch (Exception e) {
-            throw new Exception(e);
-        }
+        readProtein(protein);
+
+        System.out.println("Atoms: " + atoms.size());
     }
 
     // Clean the protein to speed up curvature
@@ -281,7 +279,7 @@ public class Protein {
         a4 = new Atom3D(x, y, z, 0);
         Triple maxTrip = null;
 
-       for (int i = 0; i < atms.size(); i++) {
+        for (int i = 0; i < atms.size(); i++) {
             a1 = atms.get(i);
             for (int j = i + 1; j < atms.size(); j++) {
                 a2 = atms.get(j);
@@ -491,10 +489,10 @@ public class Protein {
                 // Are the atoms in a singular line
                 if (isSingular(atms.get(i), atms.get(j), q)) {
                     // Solve for the singular
-                    
+
                     System.err.println("Expected a linear set for the atoms");
-                    
-                    //TODO Check to see if there is a valid sphere
+
+                    // TODO Check to see if there is a valid sphere
                 } else {
                     Atom3D[] spheres = Curvature2D.nonSingular(atms.get(i),
                             atms.get(j), q);
