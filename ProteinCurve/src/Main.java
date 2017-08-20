@@ -11,6 +11,8 @@ import java.util.Scanner;
  *
  */
 public class Main {
+    static boolean debug = false;
+    
     public static void main(String[] args) throws Exception {
         Main m = new Main();
         m.run();
@@ -18,11 +20,14 @@ public class Main {
 
     public synchronized void run() throws Exception {
         File file = new File("Curvature");
-        String[] names = file.list();
-        String last = "";
         Node<String> pros = null;
-
         final int[] using = { 0, 0 };
+        String[] names = {"4gq6-", "4hom-"};
+        
+        if(debug){
+            names = file.list();
+        }
+        String last = "";
 
         for (int i = 0; i < names.length; i++) {
             String cur = names[i].substring(0, names[i].indexOf('-'));
@@ -32,6 +37,7 @@ public class Main {
                 using[1]++;
             }
         }
+        
         final int max = 4;
 
         while (pros != null) {
@@ -49,6 +55,8 @@ public class Main {
                             "Curvature\\" + name + "-out.csv" });
                 } catch (Exception e) {
                 }
+                
+                System.err.println("Finished " + name);
                 using[0]--;
                 returnCore();
             });
@@ -119,10 +127,6 @@ public class Main {
             long time = System.currentTimeMillis() - start;
             tot += time;
             i++;
-
-            if (i % 100 == 0) {
-                System.out.println(i + " <> " + (tot / i));
-            }
 
             os.write("\n" + split[0] + "," + temp.x + "," + temp.y + ","
                     + temp.z + "," + temp.r + "," + split[7] + "," + time);

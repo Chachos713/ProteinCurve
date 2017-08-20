@@ -476,7 +476,7 @@ public class Protein {
     // 2. Is the point linear with the two atoms
     // 3. When it is not
     public Atom3D findPair(double x, double y, double z, ArrayList<Atom3D> atms) {
-        Atom3D best = new Atom3D(x, y, z, 0);
+        Atom3D best = new Atom3D(x, y, z, findClosest(x,y,z));
         Atom3D q = new Atom3D(x, y, z, 0);
 
         for (int i = 0; i < atms.size(); i++) {
