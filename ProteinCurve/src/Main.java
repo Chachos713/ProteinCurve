@@ -2,7 +2,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.Scanner;
 
-
 /**
  * The main entry point into the program. Can change according to what it is
  * needed to do.
@@ -12,19 +11,24 @@ import java.util.Scanner;
  */
 public class Main {
     static boolean debug = false;
-    
+    static boolean thread = false;
+
     public static void main(String[] args) throws Exception {
-        Main m = new Main();
-        m.run();
+        if (thread) {
+            Main m = new Main();
+            m.run();
+        } else {
+            main1(args);
+        }
     }
 
     public synchronized void run() throws Exception {
-        File file = new File("Curvature");
         Node<String> pros = null;
         final int[] using = { 0, 0 };
-        String[] names = {"4gq6-", "4hom-"};
-        
-        if(debug){
+        String[] names = { "4hom-" };
+
+        if (debug) {
+            File file = new File("Curvature");
             names = file.list();
         }
         String last = "";
@@ -37,7 +41,7 @@ public class Main {
                 using[1]++;
             }
         }
-        
+
         final int max = 4;
 
         while (pros != null) {
@@ -55,7 +59,7 @@ public class Main {
                             "Curvature\\" + name + "-out.csv" });
                 } catch (Exception e) {
                 }
-                
+
                 System.err.println("Finished " + name);
                 using[0]--;
                 returnCore();
@@ -69,8 +73,8 @@ public class Main {
 
         System.err.println("FINISHED WITH EVERYTHING");
     }
-    
-    public synchronized void returnCore(){
+
+    public synchronized void returnCore() {
         notifyAll();
     }
 

@@ -61,9 +61,9 @@ public class Protein {
     // Clean the protein to speed up curvature
     public void clean() {
         cleanburied();
+        System.out.println("Remaining Atoms: " + atoms.size());
         makeConvexHull();
-        System.out.println("Hull: " + hull.size() + " <> Atoms: "
-                + atoms.size());
+        System.out.println("Hull: " + hull.size());
     }
 
     /**
@@ -275,9 +275,10 @@ public class Protein {
         double max = -1;
         Atom3D[] spheres;
         Atom3D a1, a2, a3, a4;
-        Atom3D maxSph = null;
         a4 = new Atom3D(x, y, z, 0);
         Triple maxTrip = null;
+        Atom3D a = findPair(x, y, z, atms);
+        max = a.r;
 
         for (int i = 0; i < atms.size(); i++) {
             a1 = atms.get(i);
@@ -301,7 +302,6 @@ public class Protein {
                                 max = sph.r;
 
                                 maxTrip = new Triple(a1, a2, a3);
-                                maxSph = sph;
                             }
                         }
                     }
@@ -311,11 +311,6 @@ public class Protein {
 
         if (maxTrip == null) {
             System.err.println("ERROR:\n" + x + " <> " + y + " <> " + z);
-
-            // atms.get(0) should be the closest atom
-            // return new Atom3D(x, y, z, findClosest(x, y, z));
-
-            Atom3D a = findPair(x, y, z, atms);
             return new Atom3D(x, y, z, a.r);
         }
 
@@ -341,13 +336,12 @@ public class Protein {
                 if (sph.r > max) {
                     if (isGood(sph, atms)) {
                         max = sph.r;
-                        maxSph = sph;
                     }
                 }
             }
         }
 
-        return new Atom3D(x, y, z, maxSph.r);
+        return new Atom3D(x, y, z, max);
     }
 
     /**
