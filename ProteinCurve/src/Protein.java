@@ -160,14 +160,17 @@ public class Protein {
 
             query.buried = true;
 
-            start: for (int i = 0; i < nPhi; i++) {
+            start: for (int i = 0; i < 2 * nPhi; i++) {
                 phi = (i + 0.5) * myDphi;
                 r = (query.r + extraRadius) * Math.sin(phi);
+                
+                if(r < 0)r = -r;
+                
                 myDtheta = DX / r;
-                nTheta = (int) (2 * Math.PI / myDtheta) + 1;
-                myDtheta = 2.0 * Math.PI / (double) (nTheta);
+                nTheta = (int) (Math.PI / myDtheta) + 1;
+                myDtheta = Math.PI / (double) (nTheta);
 
-                theta: for (int j = 0; j < nTheta; j++) {
+                theta: for (int j = 0; j < 2 * nTheta; j++) {
                     theta = myDtheta * j;
                     x = query.x + (query.r + extraRadius) * Math.sin(phi)
                             * Math.cos(theta);
